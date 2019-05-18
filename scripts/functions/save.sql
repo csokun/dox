@@ -22,7 +22,7 @@ begin
 	perform dox.create_collection(collection => collection, schema => schema);
 	
 
-	if (select doc ? 'id') then
+	if (jsonb_exists(doc, 'id')) then
 
 		execute format('insert into %s.%s (id, body) 
 										values (%L, %L) 
@@ -45,7 +45,7 @@ begin
 	-- do it automatically MMMMMKKK?
 	foreach search_key in array search
 	loop
-		if(res ? search_key) then
+		if(jsonb_exists(res, search_key)) then
 			search_params :=  concat(search_params,' ',res ->> search_key);
 		end if;
 	end loop;
